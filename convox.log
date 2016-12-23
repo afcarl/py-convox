@@ -1,0 +1,7 @@
+2016-12-22 19:58:47,000 DEBUG {'Accept': 'application/json', 'Authorization': 'Basic Y29udm94OjlhY2JkZjgxLWJjYzgtNGVlNC04Y2IzLTc3MTgzZTJhYWU0Nw=='}
+2016-12-22 19:58:47,000 DEBUG getting: https://console.convox.com/racks... 
+2016-12-22 19:58:47,005 INFO Starting new HTTPS connection (1): console.convox.com
+2016-12-22 19:58:48,496 DEBUG "GET /racks HTTP/1.1" 200 None
+2016-12-22 19:58:48,498 DEBUG getting: https://console.convox.com/instances... 
+2016-12-22 19:58:48,499 INFO Starting new HTTPS connection (1): console.convox.com
+2016-12-22 19:58:49,413 DEBUG "GET /instances HTTP/1.1" 400 117
