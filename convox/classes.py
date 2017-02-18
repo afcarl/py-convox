@@ -1,3 +1,4 @@
+from tabulate import tabulate
 class Instance(object):
     """
     [{u'agent': True,
@@ -34,6 +35,18 @@ class Instance(object):
         """
 
 
+class Racks(object):
+    def init(self, as_json):
+        self.racks = []
+        self.as_json = as_json
+        for r in as_json:
+            self.racks.append(Rack(r))
+
+    def __repr__(self):
+        """Print a list of Racks."""
+        headers = ["host", "id", "name", "org", "status", "version"]
+        return tabulate([r.as_list() for r in self.racks], headers)
+
 class Rack(object):
     """
      {u'host': u'staging-1328120697.us-east-1.elb.amazonaws.com',
@@ -55,16 +68,18 @@ class Rack(object):
         for k in as_json:
             setattr(self, k.replace('-', '_'), as_json[k])
         
-    #def __repr__(self):
-        #return ", ".join(self.as_list())
+    def __repr__(self):
+        return ", ".join([x for x in self.as_list()]) + "\n"
 
-    def as_list(self):
-        ret = [
-            self.host,
-            self.id,
-            self.name,
-            self.organization_id,
-            self.status,
-            self.version,
+    def as_list(self, keys=[]):
+        default_keys = [
+            "name",
+            "status",
+            "host",
+            "id",
+            "organization_id",
+            "version",
         ]
-        return ret
+        keys = keys or default_keys
+
+        return [getattr(self, key) for key in keys]

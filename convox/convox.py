@@ -9,7 +9,8 @@ import base64
 import logging
 
 from rc.rc import RestAPI
-from classes import Instance, Rack
+from classes import Instance, Rack, Racks
+from IPython import embed
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s',
@@ -74,7 +75,9 @@ class Convox(ConvoxAPI):
 
     @property
     def racks(self):
-        return [Rack(r) for r in self.racks_as_json]
+        rl = Racks()
+        rl.init(self.racks_as_json)
+        return rl
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -84,8 +87,7 @@ def cli():
 
 @cli.command()
 def racks():
-    racks = user.racks
-    print(racks)
+    print(user.racks)
 
 
 @cli.command()
