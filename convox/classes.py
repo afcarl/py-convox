@@ -12,7 +12,6 @@ class Instance(object):
       u'status': u'active'},
     """
 
-    #def __init__(self, agent, cpu, id, memory, private_ip, processes, public_ip, started, status):
     def __init__(self, as_json):
         if as_json == 'error':
             return
@@ -42,10 +41,48 @@ class Racks(object):
         for r in as_json:
             self.racks.append(Rack(r))
 
+        self.headers = [
+            "name",
+            "status",
+            "host",
+            "id",
+            "organization_id",
+            "version",
+        ]
+        self.low = 0
+        self.current = self.racks[0]
+        self.i = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        self.i += 1
+        if self.i > len(self.racks):
+            raise StopIteration
+        else:
+            self.current = self.racks[self.i - 1]
+            return self.current
+
     def __repr__(self):
         """Print a list of Racks."""
-        headers = ["host", "id", "name", "org", "status", "version"]
-        return tabulate([r.as_list() for r in self.racks], headers)
+        return tabulate([r.as_list() for r in self.racks], self.headers)
+
+    def tabulate(self):
+        """Print a list of Racks as a table."""
+        return tabulate([r.as_list() for r in self.racks], self.headers)
+
+
+class Organization(object):
+    def __init__(self, as_json):
+        for k in as_json:
+            setattr(self, k.replace('-', '_'), as_json[k])
+        self.headers = [
+            "DeveloperIds",
+            "id",
+            "name",
+        ]
+
 
 class Rack(object):
     """
@@ -67,12 +104,7 @@ class Rack(object):
     def __init__(self, as_json):
         for k in as_json:
             setattr(self, k.replace('-', '_'), as_json[k])
-        
-    def __repr__(self):
-        return ", ".join([x for x in self.as_list()]) + "\n"
-
-    def as_list(self, keys=[]):
-        default_keys = [
+        self.headers = [
             "name",
             "status",
             "host",
@@ -80,6 +112,11 @@ class Rack(object):
             "organization_id",
             "version",
         ]
-        keys = keys or default_keys
+        
+    def __repr__(self):
+        return ", ".join([x for x in self.as_list()]) + "\n"
+
+    def as_list(self, keys=[]):
+        keys = keys or self.headers
 
         return [getattr(self, key) for key in keys]
