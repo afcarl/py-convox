@@ -30,6 +30,63 @@ class Instance(object):
         self.started = started
         self.status = status
         """
+        self.headers = [
+            "agent",
+            "cpu",
+            "id",
+            "memory",
+            "private_ip",
+            "processes",
+            "public_ip",
+            "started",
+            "status",
+        ]
+
+    def __repr__(self):
+        return ", ".join([x for x in self.as_list()]) + "\n"
+
+    def as_list(self, keys=[]):
+        keys = keys or self.headers
+
+        return [getattr(self, key) for key in keys]
+
+
+class Instances(object):
+    def init(self, as_json):
+        self.instances = []
+        self.as_json = as_json
+        for i in as_json:
+            self.instances.append(Instance(i))
+
+        self.headers = [
+            "agent",
+            "cpu",
+            "id",
+            "memory",
+            "private_ip",
+            "processes",
+            "public_ip",
+            "started",
+            "status",
+        ]
+        self.low = 0
+        self.current = self.instances[0]
+        self.i = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        self.i += 1
+        if self.i > len(self.instances):
+            raise StopIteration
+        else:
+            self.current = self.instances[self.i - 1]
+            return self.current
+
+    def __repr__(self):
+        """Print a list of Instances."""
+        return tabulate([i.as_list() for i in self.instances], self.headers)
 
 
 class Racks(object):

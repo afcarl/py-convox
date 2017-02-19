@@ -9,7 +9,7 @@ import base64
 import logging
 
 from rc.rc import RestAPI
-from classes import Instance, Racks
+from classes import Racks, Instances
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s',
@@ -23,7 +23,6 @@ CONTEXT_SETTINGS = dict(
 
 
 class ConvoxAPI(RestAPI):
-
     def __init__(self, url, api_key):
         self.url = url
 
@@ -57,8 +56,11 @@ class ConvoxAPI(RestAPI):
             logging.fatal(msg)
             exit()
 
-    def instances_as_json(self, rack):
-        self.headers['rack'] = rack
+    def set_header(self, key, value):
+        self.headers[key] = value
+
+    @property
+    def instances_as_json(self):
         return self.get("/instances")
 
     @property
@@ -70,8 +72,11 @@ class Convox(ConvoxAPI):
     def __init__(self, apikey, url="https://console.convox.com"):
         ConvoxAPI.__init__(self, url, apikey)
 
-    def instances(self, rack):
-        return [Instance(i) for i in self.instances_as_json(rack)]
+    @property
+    def instances(self):
+        il = Instances()
+        il.init(self.instances_as_json)
+        return il
 
     @property
     def racks(self):
@@ -94,13 +99,12 @@ def racks():
 @click.argument('rack', required=False)
 def instances(rack):
     """show the instances of a rack"""
-    if rack:
-        instances = user.instances(rack)
-        print(instances)
-    else:
-        for rack in user.racks:
-            print(rack.name)
-            print(user.instances(rack.name))
+    for rack in user.racks:
+        user.set_header('rack', "legit")
+        # self.headers['rack'] = rack
+        print("-------------")
+        print(rack.name)
+        print(user.instances)
 
 user = Convox(os.environ.get('CONVOX_API_KEY'))
 user.check_token()
