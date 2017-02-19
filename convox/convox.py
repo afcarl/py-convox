@@ -53,6 +53,7 @@ class ConvoxAPI(RestAPI):
             msg += click.style(dashboard_url, fg='blue') + "\n"
             msg += ("Once you have it, add it to your bash profile: \n"
                     "export CONVOX_API_KEY='changeme'")
+            click.secho(msg)
             logging.fatal(msg)
             exit()
 
@@ -101,7 +102,8 @@ def instances(rack):
             print(rack.name)
             print(user.instances(rack.name))
 
-user = Convox(os.environ['CONVOX_API_KEY'])
+user = Convox(os.environ.get('CONVOX_API_KEY'))
+user.check_token()
 
 if __name__ == '__main__':
     cli(obj={})
