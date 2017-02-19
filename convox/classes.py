@@ -18,11 +18,7 @@ class Instance(object):
         if as_json == 'error':
             return
         for k in as_json:
-            try:
-                setattr(self, k.replace('-', '_'), as_json[k])
-            except TypeError:
-                from IPython import embed
-                embed()
+            setattr(self, k.replace('-', '_'), as_json[k])
         """
         self.agent = agent
         self.cpu = cpu
