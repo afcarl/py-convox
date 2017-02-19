@@ -9,8 +9,7 @@ import base64
 import logging
 
 from rc.rc import RestAPI
-from classes import Instance, Rack, Racks
-from IPython import embed
+from classes import Instance, Racks
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s',

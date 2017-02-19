@@ -1,4 +1,6 @@
 from tabulate import tabulate
+
+
 class Instance(object):
     """
     [{u'agent': True,
@@ -19,8 +21,8 @@ class Instance(object):
             try:
                 setattr(self, k.replace('-', '_'), as_json[k])
             except TypeError:
-                from IPython import embed; embed()
-        
+                from IPython import embed
+                embed()
         """
         self.agent = agent
         self.cpu = cpu
@@ -86,21 +88,22 @@ class Organization(object):
 
 class Rack(object):
     """
-     {u'host': u'staging-1328120697.us-east-1.elb.amazonaws.com',
-      u'id': u'8f90d422-f310-464f-a132-9721a3d050f2',
-      u'name': u'staging',
-      u'organization': {u'DeveloperIds': [u'175e78e9-5d09-4313-bcc7-b991469af4a8',
-        u'8940c637-0aeb-4b11-9252-c6685fb96c65',
-        u'c0c1322c-ec7f-4034-8579-2946b29c0f0b',
-        u'89b5c1e3-94f5-4ef1-8fe7-a0f99f6ff7dd',
-        u'8d67ef0d-9bbb-44cf-85d5-a3acc310bb77',
-        u'c873c4b9-26db-440a-8fdc-35159ccfdf8f'],
-       u'id': u'1baa4966-94ab-450a-acfd-3e897a0d25fa',
-       u'name': u'vhx'},
-      u'organization-id': u'1baa4966-94ab-450a-acfd-3e897a0d25fa',
-      u'status': u'running',
-      u'version': u''}]
+    {u'host': u'staging-1328120697.us-east-1.elb.amazonaws.com',
+     u'id': u'8f90d422-f310-464f-a132-9721a3d050f2',
+     u'name': u'staging',
+   u'organization': {u'DeveloperIds': [u'175e78e9-5d09-4313-bcc7-b991469af4a8',
+       u'8940c637-0aeb-4b11-9252-c6685fb96c65',
+       u'c0c1322c-ec7f-4034-8579-2946b29c0f0b',
+       u'89b5c1e3-94f5-4ef1-8fe7-a0f99f6ff7dd',
+       u'8d67ef0d-9bbb-44cf-85d5-a3acc310bb77',
+       u'c873c4b9-26db-440a-8fdc-35159ccfdf8f'],
+      u'id': u'1baa4966-94ab-450a-acfd-3e897a0d25fa',
+      u'name': u'vhx'},
+     u'organization-id': u'1baa4966-94ab-450a-acfd-3e897a0d25fa',
+     u'status': u'running',
+     u'version': u''}]
     """
+
     def __init__(self, as_json):
         for k in as_json:
             setattr(self, k.replace('-', '_'), as_json[k])
@@ -112,7 +115,7 @@ class Rack(object):
             "organization_id",
             "version",
         ]
-        
+
     def __repr__(self):
         return ", ".join([x for x in self.as_list()]) + "\n"
 
